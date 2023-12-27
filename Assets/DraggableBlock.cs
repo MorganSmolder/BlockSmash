@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class DraggableBlock : MonoBehaviour
 {
     public GameGrid.Block GameData { get; private set; }
-    public SpriteRenderer[] Sprites { get; private set; }
+    public MeshRenderer[] Blocks { get; private set; }
 
     private bool _isPlaced;
     private GameGrid _grid;
@@ -20,6 +20,7 @@ public class DraggableBlock : MonoBehaviour
     private static DraggableBlock _dragTarget;
     private static bool _inDrag => _dragTarget != null;
     private static int _lastGlobalUpdateFrame = -1;
+    private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
     public Vector2Int GetGridPos()
     {
@@ -33,15 +34,18 @@ public class DraggableBlock : MonoBehaviour
         transform.localPosition = pos;
     }
     
-    public void SetSprite(Sprite target)
+    public void SetColor(Color target)
     {
-        foreach (var sr in Sprites)
+        var emissiveColor = target;
+        emissiveColor.a = .1f;
+        foreach (var sr in Blocks)
         {
             if (sr == null)
             {
                 continue;
             }
-            sr.sprite = target;
+            sr.material.color = target;
+            sr.material.SetColor(EmissionColor, emissiveColor);
         }
     }
 
@@ -91,7 +95,7 @@ public class DraggableBlock : MonoBehaviour
                 _dragTarget.TeleportBlockToPosition(worldPos);
                 _dragTarget._collider.enabled = false;
 
-                foreach (var sr in _dragTarget.Sprites)
+                foreach (var sr in _dragTarget.Blocks)
                 {
                     if (sr == null)
                     {
@@ -106,7 +110,7 @@ public class DraggableBlock : MonoBehaviour
         }
 
         var mousePosWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosWorld.z = 0;
+        mousePosWorld.z = -1f;
 
         _dragTarget.transform.position = mousePosWorld + Vector3.up * 2f;
     }
@@ -134,10 +138,12 @@ public class DraggableBlock : MonoBehaviour
 
     public static DraggableBlock Create(GameGrid.Block target, GameGrid grid, Sprite sprite)
     {
+        var staticData = StaticData.Instance;
+        
         var parent = new GameObject($"{target.width}x{target.height}_Block").transform;
         var block = parent.AddComponent<DraggableBlock>();
         
-        block.Sprites = new SpriteRenderer[target.values.Length];
+        block.Blocks = new MeshRenderer[target.values.Length];
         
         var halfDim = new Vector3(target.width / 2f, target.height / 2f);
         var halfBlockSize = new Vector3(.5f, .5f);
@@ -152,10 +158,13 @@ public class DraggableBlock : MonoBehaviour
                 }
                 var b = new GameObject($"{target.width}x{target.height}");
 
-                var sr = b.AddComponent<SpriteRenderer>();
-                sr.sprite = sprite;
+                var sr = b.AddComponent<MeshRenderer>();
+                sr.material = staticData.BlockMaterial;
 
-                block.Sprites[idx] = sr;
+                var mf = b.AddComponent<MeshFilter>();
+                mf.mesh = staticData.blockMesh;
+
+                block.Blocks[idx] = sr;
                 
                 var offset = new Vector3(x, y);               
                 b.transform.parent = parent;
@@ -169,8 +178,8 @@ public class DraggableBlock : MonoBehaviour
         block.GameData = target;
         block._grid = grid;
 
-        var blockColors = StaticData.Instance.blockColors;
-        block.SetSprite(blockColors[Random.Range(0, blockColors.Count)]);
+        var blockColors = staticData.blockColors;
+        block.SetColor(blockColors[Random.Range(0, blockColors.Count)]);
         
         return block;
     }

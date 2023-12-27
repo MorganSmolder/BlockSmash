@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,7 +23,7 @@ public class GameGrid : MonoBehaviour
     public struct CellMeta
     {
         public bool occupied;
-        public SpriteRenderer sceneObject;
+        public MeshRenderer sceneObject;
     }
 
     [SerializeField] private Transform gameBorder;
@@ -118,7 +119,7 @@ public class GameGrid : MonoBehaviour
                 ref var valGame = ref _logicalGrid[idxGame];
                 var valBlock = gameData.values[idxBlock];
 
-                valGame.sceneObject ??= draggableBlock.Sprites[idxBlock];
+                valGame.sceneObject ??= draggableBlock.Blocks[idxBlock];
                 valGame.occupied |= valBlock;
             }
         }
@@ -140,7 +141,7 @@ public class GameGrid : MonoBehaviour
         return true;
     }
     
-    private void Awake()
+    private void Start()
     {        
         _logicalGrid = new CellMeta[GameWidth * GameHeight];
 
@@ -251,8 +252,9 @@ public class GameGrid : MonoBehaviour
                 ref var meta = ref _logicalGrid[idx];
 
                 meta.occupied = false;
-                meta.sceneObject.enabled = false;
+                var obj = meta.sceneObject;
                 meta.sceneObject = null;
+                obj.transform.DOScale(Vector3.zero, .25f);
             }
 
             combo++;
@@ -284,8 +286,9 @@ public class GameGrid : MonoBehaviour
                 ref var meta = ref _logicalGrid[idx];
 
                 meta.occupied = false;
-                meta.sceneObject.enabled = false;
+                var obj = meta.sceneObject;
                 meta.sceneObject = null;
+                obj.transform.DOScale(Vector3.zero, .25f);
             }
 
             combo++;
