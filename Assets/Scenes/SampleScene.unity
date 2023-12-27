@@ -489,10 +489,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockColors:
-  - {r: 1, g: 0, b: 0.37499, a: 1}
-  - {r: 0, g: 0.595309, b: 1, a: 1}
-  - {r: 0.72559786, g: 0, b: 1, a: 1}
-  - {r: 0, g: 1, b: 0.4884801, a: 1}
+  - {fileID: 21300024, guid: b775dea1297456549b679907c32f0739, type: 3}
+  - {fileID: 21300026, guid: b775dea1297456549b679907c32f0739, type: 3}
+  - {fileID: 21300028, guid: b775dea1297456549b679907c32f0739, type: 3}
+  - {fileID: 21300030, guid: b775dea1297456549b679907c32f0739, type: 3}
+  - {fileID: 21300032, guid: b775dea1297456549b679907c32f0739, type: 3}
+  - {fileID: 21300034, guid: b775dea1297456549b679907c32f0739, type: 3}
 --- !u!4 &755375126
 Transform:
   m_ObjectHideFlags: 0

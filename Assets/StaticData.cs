@@ -5,7 +5,7 @@ public class StaticData : MonoBehaviour
 {
     public static StaticData Instance { get; private set;  }
 
-    public List<Color> blockColors;
+    public List<Sprite> blockColors;
     
     private void Awake()
     {

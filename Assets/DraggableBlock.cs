@@ -33,7 +33,7 @@ public class DraggableBlock : MonoBehaviour
         transform.localPosition = pos;
     }
     
-    public void Tint(Color target)
+    public void SetSprite(Sprite target)
     {
         foreach (var sr in Sprites)
         {
@@ -41,7 +41,7 @@ public class DraggableBlock : MonoBehaviour
             {
                 continue;
             }
-            sr.color = target;
+            sr.sprite = target;
         }
     }
 
@@ -170,8 +170,7 @@ public class DraggableBlock : MonoBehaviour
         block._grid = grid;
 
         var blockColors = StaticData.Instance.blockColors;
-        block._currentColor = blockColors[Random.Range(0, blockColors.Count)];
-        block.Tint(block._currentColor);
+        block.SetSprite(blockColors[Random.Range(0, blockColors.Count)]);
         
         return block;
     }
