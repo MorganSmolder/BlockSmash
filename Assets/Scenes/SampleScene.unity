@@ -380,7 +380,7 @@ MonoBehaviour:
   BloomDiffuse: 1
   BloomThreshold: 0
   BloomSoftness: 0
-  LUT: 1
+  LUT: 0
   LutAmount: 1
   SourceLut: {fileID: 2800000, guid: 188daf8e8ab6130418e20965765fce89, type: 3}
   ImageFiltering: 0
