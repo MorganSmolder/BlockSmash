@@ -51,7 +51,7 @@ Shader "Unlit/block"
                 {
                     dif = 0.2f;
                 }
-                dif = lerp(.5, 1, dif);
+                dif = lerp(.2, 1, dif);
 
                 const float3 light_spec = float3(0, 1, 0);
                 float spec = saturate(dot(light_spec, normalize(i.normal)));
