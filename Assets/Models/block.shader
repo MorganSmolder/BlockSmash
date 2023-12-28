@@ -6,7 +6,11 @@ Shader "Unlit/block"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { 
+            "RenderType"="Transparent" 
+            "Queue"="Transparent"
+        }
+        Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
@@ -56,7 +60,7 @@ Shader "Unlit/block"
                 const float3 light_spec = float3(0, 1, 0);
                 float spec = saturate(dot(light_spec, normalize(i.normal)));
 
-                return saturate(dif * _Color * 2 + spec);
+                return saturate(dif * _Color * 2 + spec) * _Color.a;
             }
             ENDCG
         }

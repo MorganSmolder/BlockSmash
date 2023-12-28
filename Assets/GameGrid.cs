@@ -17,11 +17,12 @@ public class GameGrid : MonoBehaviour
         public int width;
         public int height;
         public bool[] values;
+        public Vector3 HalfSize => new Vector3(width, height) / 2f;
     }
     
     [Serializable]
     public struct CellMeta
-    {
+    { 
         public bool occupied;
         public MeshRenderer sceneObject;
     }
@@ -119,12 +120,22 @@ public class GameGrid : MonoBehaviour
                 ref var valGame = ref _logicalGrid[idxGame];
                 var valBlock = gameData.values[idxBlock];
 
-                valGame.sceneObject ??= draggableBlock.Blocks[idxBlock];
+                var blockRenderer = draggableBlock.Visuals.Blocks[idxBlock];
+                if (blockRenderer != null)
+                {
+                    valGame.sceneObject = blockRenderer;
+                    blockRenderer.transform.parent = null;
+                    
+                    var gridPos = new Vector2Int(x, y);
+                    var worldPos = GridPosToWorldPos(gridPos) + new Vector3(1, 1) * .5f;
+                    blockRenderer.transform.position = worldPos;
+                }
                 valGame.occupied |= valBlock;
             }
         }
 
         _unplacedBlocks.Remove(draggableBlock);
+        Destroy(draggableBlock.gameObject);
         
         CheckForScore();
         

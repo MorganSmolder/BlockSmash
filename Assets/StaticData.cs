@@ -11,9 +11,5 @@ public class StaticData : MonoBehaviour
     public Mesh blockMesh;
     public Material BlockMaterial;
     
-    private void Awake()
-    {
-        Debug.Assert(Instance = null);
-        Instance = this;
-    }
+    private void Awake() => Instance = this;
 }
